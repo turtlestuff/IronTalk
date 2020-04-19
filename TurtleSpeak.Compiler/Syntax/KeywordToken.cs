@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Microsoft.Scripting;
+﻿using Microsoft.Scripting;
 
-namespace TinySpeak.Compiler.Syntax
+namespace TurtleSpeak.Compiler.Syntax
 {
     public class KeywordToken : IdOrKeywordToken
     {

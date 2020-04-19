@@ -1,4 +1,4 @@
-﻿namespace TinySpeak.Compiler.Syntax
+﻿namespace TurtleSpeak.Compiler.Syntax
 {
     public enum SyntaxTokenKind
     {
@@ -6,7 +6,7 @@
         Colon,
         ColonEquals,
         Dot,
-        HashOpenBrackets,
+        HashOpenBracket,
         HashOpenParenthesis,
         Hat,
         OpenBracket,

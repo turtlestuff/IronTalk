@@ -1,6 +1,6 @@
 ﻿using Microsoft.Scripting;
 
-namespace TinySpeak.Compiler.Syntax
+namespace TurtleSpeak.Compiler.Syntax
 {
     public abstract class Token
     {

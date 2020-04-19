@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinySpeak", "TinySpeak\TinySpeak.csproj", "{9AA92911-BC29-4416-AEE2-7C41DE313205}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtleSpeak", "TurtleSpeak\TurtleSpeak.csproj", "{9AA92911-BC29-4416-AEE2-7C41DE313205}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinySpeak.Compiler", "TinySpeak.Compiler\TinySpeak.Compiler.csproj", "{D19E2EE3-26DB-44FF-B715-B9101E527AC9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtleSpeak.Compiler", "TurtleSpeak.Compiler\TurtleSpeak.Compiler.csproj", "{D19E2EE3-26DB-44FF-B715-B9101E527AC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

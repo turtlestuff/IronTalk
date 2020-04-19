@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\TinySpeak.Compiler\TinySpeak.Compiler.csproj" />
+      <ProjectReference Include="..\TurtleSpeak.Compiler\TurtleSpeak.Compiler.csproj" />
     </ItemGroup>
 
 </Project>
