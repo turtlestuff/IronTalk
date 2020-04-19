@@ -2,19 +2,19 @@
 {
     public enum SyntaxTokenKind
     {
-        CloseBracket,
-        CloseParenthesis,
+        Eof = 0,
         Colon,
         ColonEquals,
         Dot,
-        Eof,
         HashOpenBrackets,
         HashOpenParenthesis,
         Hat,
-        Invalid,
         OpenBracket,
+        CloseBracket,
         OpenParenthesis,
+        CloseParenthesis,
         Pipe,
-        Semicolon
+        Semicolon,
+        Invalid
     }
 }

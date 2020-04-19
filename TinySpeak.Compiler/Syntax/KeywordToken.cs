@@ -3,7 +3,7 @@ using Microsoft.Scripting;
 
 namespace TinySpeak.Compiler.Syntax
 {
-    class KeywordToken : IdOrKeywordToken
+    public class KeywordToken : IdOrKeywordToken
     {
         public KeywordToken(KeywordTokenKind name, SourceSpan location) : base(name.ToString().ToLowerInvariant(), location)
         {
@@ -11,7 +11,7 @@ namespace TinySpeak.Compiler.Syntax
     }
 
 
-    enum KeywordTokenKind
+    public enum KeywordTokenKind
     {
         True,
         False,

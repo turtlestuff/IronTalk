@@ -2,7 +2,7 @@ using Microsoft.Scripting;
 
 namespace TinySpeak.Compiler.Syntax
 {
-    class IdOrKeywordToken : Token
+    public class IdOrKeywordToken : Token
     {
         public string Name { get; }
 

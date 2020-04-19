@@ -2,7 +2,7 @@
 
 namespace TinySpeak.Compiler.Syntax
 {
-    class SyntaxToken : Token
+    public class SyntaxToken : Token
     {
         public SyntaxTokenKind Kind { get; }
 
