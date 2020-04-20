@@ -200,6 +200,7 @@ namespace TurtleSpeak.Compiler.Syntax
             {
                 return new NumberToken(b, reader.TokenSpan);
             }
+
             throw new FormatException($"bad number format at {reader.TokenSpan}");
         }
 

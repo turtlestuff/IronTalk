@@ -12,6 +12,7 @@ namespace TurtleSpeak
             {
                 throw new NotImplementedException("we dont have fancy yet");
             }
+
             Console.WriteLine(@"
 It's the very very very good
 TurtleSpeak Tokenizer!!!!!!!!");

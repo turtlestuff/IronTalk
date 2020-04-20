@@ -9,6 +9,5 @@ namespace TurtleSpeak.Compiler.Syntax
         }
 
         public override string ToString() => $"SymbolToken {Value}@{Location}";
-        
     }
 }

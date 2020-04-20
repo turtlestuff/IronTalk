@@ -8,11 +8,11 @@ namespace TurtleSpeak.Compiler.Syntax
         public NumberToken(double val, SourceSpan location) : base(val, location)
         {
         }
-        
+
         public NumberToken(int val, SourceSpan location) : base(val, location)
         {
         }
-        
+
         public NumberToken(long val, SourceSpan location) : base(val, location)
         {
         }
@@ -20,6 +20,7 @@ namespace TurtleSpeak.Compiler.Syntax
         public NumberToken(BigInteger val, SourceSpan location) : base(val, location)
         {
         }
+
         public override string ToString() => $"NumberToken: {Value.GetType().Name}:{Value}@{Location}";
     }
 }

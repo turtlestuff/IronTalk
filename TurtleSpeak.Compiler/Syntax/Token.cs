@@ -6,6 +6,5 @@ namespace TurtleSpeak.Compiler.Syntax
     {
         public SourceSpan Location { get; }
         protected Token(SourceSpan location) => Location = location;
-        
     }
 }

@@ -8,9 +8,6 @@ namespace TurtleSpeak.Compiler.Syntax
 
         public SyntaxToken(SyntaxTokenKind kind, SourceSpan location) : base(location) => Kind = kind;
 
-        public override string ToString()
-        {
-            return $"{Kind}@{Location}";
-        }
+        public override string ToString() => $"{Kind}@{Location}";
     }
 }
