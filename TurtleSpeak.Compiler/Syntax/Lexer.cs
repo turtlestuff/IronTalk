@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Runtime;
 
@@ -12,11 +10,11 @@ namespace TurtleSpeak.Compiler.Syntax
     {
         const char Eof = unchecked((char) -1); //eof charcter
 
-        readonly char[] SpecialCharacters = {'+', '/', '\\', '.', '~', '<', '>', '=', '@', '%', '!', '&', '?', '!', '-'};
+        readonly char[] SpecialCharacters = { '+', '/', '\\', '.', '~', '<', '>', '=', '@', '%', '!', '&', '?', '!', '-' };
 
         //public CompilerContext Context { get; }
         //SourceCodeReader sourceCode;
-        TokenizerBuffer reader;
+        readonly TokenizerBuffer reader;
 
         public Lexer(TextReader r)
         {
@@ -32,7 +30,7 @@ namespace TurtleSpeak.Compiler.Syntax
             SkipWhitespace();
             var ch = (char) reader.Peek();
 
-            if (ch != Eof) reader.DiscardToken();
+            reader.DiscardToken();
             switch (ch)
             {
                 case Eof:
@@ -40,15 +38,9 @@ namespace TurtleSpeak.Compiler.Syntax
                     yield break;
                 case ':':
                     reader.Read();
-                    if (reader.Read('='))
-                    {
-                        reader.MarkSingleLineTokenEnd();
-                        yield return new SyntaxToken(SyntaxTokenKind.ColonEquals, reader.TokenSpan);
-                        break;
-                    }
-
+                    var kind = reader.Read('=') ? SyntaxTokenKind.ColonEquals : SyntaxTokenKind.Colon;
                     reader.MarkSingleLineTokenEnd();
-                    yield return new SyntaxToken(SyntaxTokenKind.Colon, reader.TokenSpan);
+                    yield return new SyntaxToken(kind, reader.TokenSpan);
                     break;
                 case '.':
                     yield return LexSingleOperator(SyntaxTokenKind.Dot);
@@ -85,7 +77,7 @@ namespace TurtleSpeak.Compiler.Syntax
                         yield return new SymbolToken(s[1..], reader.TokenSpan);
                         break;
                     }
-                    
+
                     break;
                 case '^':
                     yield return LexSingleOperator(SyntaxTokenKind.Hat);
@@ -118,7 +110,7 @@ namespace TurtleSpeak.Compiler.Syntax
             goto doItAgain;
         }
 
-        static readonly char[] WhitespaceChars = {' ', '\r', '\n', '\t'};
+        static readonly char[] WhitespaceChars = { ' ', '\r', '\n', '\t' };
 
         void SkipWhitespace()
         {
@@ -152,27 +144,19 @@ namespace TurtleSpeak.Compiler.Syntax
         string ReadIdentifier()
         {
             reader.Read();
-            while (true)
-            {
-                var c = (char) reader.Read();
-                if(char.IsLetterOrDigit(c)) continue;
-                reader.MarkSingleLineTokenEnd();
-                break;
-            }
+            while (char.IsLetterOrDigit((char) reader.Peek()))
+                reader.Read();
 
+            reader.MarkSingleLineTokenEnd();
             return reader.GetTokenString();
         }
 
         string ReadBinarySelector()
         {
             reader.Read();
-            if (!IsSpecialCharacter((char) reader.Peek()))
-            {
-                reader.MarkSingleLineTokenEnd();
-                return reader.GetTokenString();
-            }
+            if (IsSpecialCharacter((char) reader.Peek()))
+                reader.Read();
 
-            reader.Read();
             reader.MarkSingleLineTokenEnd();
             return reader.GetTokenString();
         }

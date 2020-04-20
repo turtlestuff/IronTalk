@@ -17,7 +17,7 @@ namespace TurtleSpeak
             {
                 var source = Console.ReadLine();
                 var lexer = new Lexer(new StringReader(source ?? ""));
-                foreach(var l in lexer.Lex())
+                foreach (var l in lexer.Lex())
                 {
                     Console.WriteLine(l);
                 }
