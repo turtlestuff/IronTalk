@@ -115,6 +115,12 @@ namespace TurtleSpeak.Compiler.Syntax
                         break;
                     }
 
+                    if (char.IsLetter(ch))
+                    {
+                        yield return ReadIdOrKeywordToken();
+                        break;
+                    }
+
                     reader.Read();
                     reader.MarkSingleLineTokenEnd();
                     yield return new SyntaxToken(SyntaxTokenKind.Invalid, reader.TokenSpan);
@@ -163,6 +169,18 @@ namespace TurtleSpeak.Compiler.Syntax
 
             reader.MarkSingleLineTokenEnd();
             return reader.GetTokenString();
+        }
+
+        IdOrKeywordToken ReadIdOrKeywordToken()
+        {
+            reader.Read();
+            while (char.IsLetterOrDigit((char) reader.Peek()))
+                reader.Read();
+            reader.MarkSingleLineTokenEnd();
+
+            return Enum.TryParse<KeywordTokenKind>(reader.GetTokenString(), true, out var b)
+                ? new KeywordToken(b, reader.TokenSpan)
+                : new IdOrKeywordToken(reader.GetTokenString(), reader.TokenSpan);
         }
 
         string ReadBinarySelector()

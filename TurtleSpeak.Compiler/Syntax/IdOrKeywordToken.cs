@@ -10,5 +10,8 @@ namespace TurtleSpeak.Compiler.Syntax
         {
             Name = name;
         }
+        
+        public override string ToString() => $"IdOrKeywordToken {Name}@{Location}";
+
     }
 }
