@@ -7,5 +7,7 @@ namespace TurtleSpeak.Compiler.Syntax
         public StringToken(string val, SourceSpan location) : base(val, location)
         {
         }
+
+        public override string ToString() => $"StringToken \"{Value}\"@{Location}";
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Scripting;
+﻿using System.Numerics;
+using Microsoft.Scripting;
 
 namespace TurtleSpeak.Compiler.Syntax
 {
@@ -11,5 +12,14 @@ namespace TurtleSpeak.Compiler.Syntax
         public NumberToken(int val, SourceSpan location) : base(val, location)
         {
         }
+        
+        public NumberToken(long val, SourceSpan location) : base(val, location)
+        {
+        }
+
+        public NumberToken(BigInteger val, SourceSpan location) : base(val, location)
+        {
+        }
+        public override string ToString() => $"NumberToken: {Value.GetType().Name}:{Value}@{Location}";
     }
 }

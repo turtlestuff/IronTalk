@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.IO;
+using System.Numerics;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Runtime;
 
@@ -10,7 +13,8 @@ namespace TurtleSpeak.Compiler.Syntax
     {
         const char Eof = unchecked((char) -1); //eof charcter
 
-        readonly char[] SpecialCharacters = { '+', '/', '\\', '.', '~', '<', '>', '=', '@', '%', '!', '&', '?', '!', '-' };
+        readonly char[] SpecialCharacters =
+            {'+', '/', '\\', '.', '~', '<', '>', '=', '@', '%', '!', '&', '?', '!', '-'};
 
         //public CompilerContext Context { get; }
         //SourceCodeReader sourceCode;
@@ -100,7 +104,17 @@ namespace TurtleSpeak.Compiler.Syntax
                 case ';':
                     yield return LexSingleOperator(SyntaxTokenKind.Semicolon);
                     break;
+                case '"':
+                    yield return new StringToken(ReadStringLiteral()[1..^1], reader.TokenSpan);
+                    break;
                 default:
+
+                    if (char.IsDigit(ch) || ch == '-' || ch == '+')
+                    {
+                        yield return ReadNumber();
+                        break;
+                    }
+
                     reader.Read();
                     reader.MarkSingleLineTokenEnd();
                     yield return new SyntaxToken(SyntaxTokenKind.Invalid, reader.TokenSpan);
@@ -110,7 +124,7 @@ namespace TurtleSpeak.Compiler.Syntax
             goto doItAgain;
         }
 
-        static readonly char[] WhitespaceChars = { ' ', '\r', '\n', '\t' };
+        static readonly char[] WhitespaceChars = {' ', '\r', '\n', '\t'};
 
         void SkipWhitespace()
         {
@@ -159,6 +173,34 @@ namespace TurtleSpeak.Compiler.Syntax
 
             reader.MarkSingleLineTokenEnd();
             return reader.GetTokenString();
+        }
+
+        NumberToken ReadNumber()
+        {
+            reader.Read();
+            while (char.IsDigit((char) reader.Peek()) || (char) reader.Peek() == 'e' || (char) reader.Peek() == '-' ||
+                   (char) reader.Peek() == '.')
+                reader.Read();
+            reader.MarkSingleLineTokenEnd();
+            var numberString = reader.GetTokenString();
+            if (numberString.Contains('.') || numberString.Contains('e'))
+            {
+                if (double.TryParse(numberString, NumberStyles.Float, CultureInfo.InvariantCulture, out var d))
+                    return new NumberToken(d, reader.TokenSpan);
+            }
+            else if (int.TryParse(numberString, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i))
+            {
+                return new NumberToken(i, reader.TokenSpan);
+            }
+            else if (long.TryParse(numberString, NumberStyles.Integer, CultureInfo.InvariantCulture, out var l))
+            {
+                return new NumberToken(l, reader.TokenSpan);
+            }
+            else if (BigInteger.TryParse(numberString, NumberStyles.Integer, CultureInfo.InvariantCulture, out var b))
+            {
+                return new NumberToken(b, reader.TokenSpan);
+            }
+            throw new FormatException($"bad number format at {reader.TokenSpan}");
         }
 
         bool IsSpecialCharacter(char c) => Array.IndexOf(SpecialCharacters, c) != -1;
