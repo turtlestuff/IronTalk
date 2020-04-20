@@ -8,6 +8,7 @@ namespace TurtleSpeak.Compiler.Syntax
         {
         }
 
-        public override string ToString() => $"SymbolToken {Value}@{Location}";
+        public override string ToString() =>
+            $"SymbolToken #{(((string) Value).Contains(' ') ? "\"" : "")}{Value}{(((string) Value).Contains(' ') ? "\"" : "")}@{Location}";
     }
 }

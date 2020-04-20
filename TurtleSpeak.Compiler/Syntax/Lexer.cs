@@ -13,7 +13,7 @@ namespace TurtleSpeak.Compiler.Syntax
     {
         const char Eof = unchecked((char) -1); //eof charcter
 
-        readonly char[] SpecialCharacters =
+        readonly char[] specialCharacters =
             {'+', '/', '\\', '.', '~', '<', '>', '=', '@', '%', '!', '&', '?', '!', '-'};
 
         //public CompilerContext Context { get; }
@@ -82,6 +82,8 @@ namespace TurtleSpeak.Compiler.Syntax
                         break;
                     }
 
+                    reader.MarkSingleLineTokenEnd();
+                    yield return new SyntaxToken(SyntaxTokenKind.Invalid, reader.TokenSpan);
                     break;
                 case '^':
                     yield return LexSingleOperator(SyntaxTokenKind.Hat);
@@ -107,7 +109,23 @@ namespace TurtleSpeak.Compiler.Syntax
                 case '"':
                     yield return new StringToken(ReadStringLiteral()[1..^1], reader.TokenSpan);
                     break;
+                case '$':
+                    reader.Read();
+                    reader.MarkTokenEnd(reader.Read() == '\n'); 
+                    //This seems weird, but this is standard Smalltalk behaviour (tested in squeak)
+                    //Doing $ and putting a newline right after it will return a newline character.
+                    //Also, something like '$ ' will indeed return a space.
+                    yield return reader.Peek() != Eof
+                        ? (Token) new CharacterToken(reader.GetTokenString()[^1], reader.TokenSpan)
+                        : new SyntaxToken(SyntaxTokenKind.Invalid, reader.TokenSpan);
+                    break;
                 default:
+
+                    if (IsSpecialCharacter(ch))
+                    {
+                        yield return new IdOrKeywordToken(ReadBinarySelector(), reader.TokenSpan);
+                        break;
+                    }
 
                     if (char.IsDigit(ch) || ch == '-' || ch == '+')
                     {
@@ -222,6 +240,6 @@ namespace TurtleSpeak.Compiler.Syntax
             throw new FormatException($"bad number format at {reader.TokenSpan}");
         }
 
-        bool IsSpecialCharacter(char c) => Array.IndexOf(SpecialCharacters, c) != -1;
+        bool IsSpecialCharacter(char c) => Array.IndexOf(specialCharacters, c) != -1;
     }
 }
