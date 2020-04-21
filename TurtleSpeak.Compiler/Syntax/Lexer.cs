@@ -40,6 +40,10 @@ namespace TurtleSpeak.Compiler.Syntax
                 case Eof:
                     yield return new SyntaxToken(SyntaxTokenKind.Eof, reader.TokenSpan);
                     yield break;
+                case '\'':
+                    reader.ReadLine();
+                    reader.Read();
+                    break;
                 case ':':
                     reader.Read();
                     var kind = reader.Read('=') ? SyntaxTokenKind.ColonEquals : SyntaxTokenKind.Colon;
