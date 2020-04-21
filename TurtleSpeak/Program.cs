@@ -21,7 +21,7 @@ TurtleSpeak Tokenizer!!!!!!!!");
                 Console.Write(">=>");
                 var source = Console.ReadLine();
                 var lexer = new Lexer(new StringReader(source ?? ""));
-                foreach (var l in lexer.Lex())
+                while (lexer.Lex() is var l ^ l is SyntaxToken {Kind: SyntaxTokenKind.Eof})
                 {
                     Console.WriteLine(l);
                 }

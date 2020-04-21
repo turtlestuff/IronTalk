@@ -28,7 +28,7 @@ namespace TurtleSpeak.Compiler.Syntax
                 10, true);
         }
 
-        public IEnumerable<Token> Lex()
+        public Token Lex()
         {
             doItAgain:
             SkipWhitespace();
@@ -38,8 +38,7 @@ namespace TurtleSpeak.Compiler.Syntax
             switch (ch)
             {
                 case Eof:
-                    yield return new SyntaxToken(SyntaxTokenKind.Eof, reader.TokenSpan);
-                    yield break;
+                    return new SyntaxToken(SyntaxTokenKind.Eof, reader.TokenSpan);
                 case '\'':
                     reader.ReadLine();
                     reader.Read();
@@ -48,105 +47,88 @@ namespace TurtleSpeak.Compiler.Syntax
                     reader.Read();
                     var kind = reader.Read('=') ? SyntaxTokenKind.ColonEquals : SyntaxTokenKind.Colon;
                     reader.MarkSingleLineTokenEnd();
-                    yield return new SyntaxToken(kind, reader.TokenSpan);
-                    break;
+                    return new SyntaxToken(kind, reader.TokenSpan);
                 case '.':
-                    yield return LexSingleOperator(SyntaxTokenKind.Dot);
-                    break;
+                    return LexSingleOperator(SyntaxTokenKind.Dot);
                 case '#':
                     reader.Read();
                     if (reader.Read('('))
                     {
                         reader.MarkSingleLineTokenEnd();
-                        yield return new SyntaxToken(SyntaxTokenKind.HashOpenParenthesis, reader.TokenSpan); //array
-                        break;
+                        return new SyntaxToken(SyntaxTokenKind.HashOpenParenthesis, reader.TokenSpan); //array
                     }
-                    else if (reader.Read('['))
+
+                    if (reader.Read('['))
                     {
                         reader.MarkSingleLineTokenEnd();
-                        yield return new SyntaxToken(SyntaxTokenKind.HashOpenBracket, reader.TokenSpan); //byte array
-                        break;
+                        return new SyntaxToken(SyntaxTokenKind.HashOpenBracket, reader.TokenSpan); //byte array
                     }
-                    else if (reader.Peek() == '"')
+
+                    if (reader.Peek() == '"')
                     {
                         var s = ReadStringLiteral();
-                        yield return new SymbolToken(s[2..^1], reader.TokenSpan);
-                        break;
+                        return new SymbolToken(s[2..^1], reader.TokenSpan);
                     }
-                    else if (char.IsLetter((char) reader.Peek()))
+
+                    if (char.IsLetter((char) reader.Peek()))
                     {
                         var s = ReadIdentifier();
-                        yield return new SymbolToken(s[1..], reader.TokenSpan);
-                        break;
+                        return new SymbolToken(s[1..], reader.TokenSpan);
                     }
-                    else if (IsSpecialCharacter((char) reader.Peek()))
+
+                    if (IsSpecialCharacter((char) reader.Peek()))
                     {
                         var s = ReadBinarySelector();
-                        yield return new SymbolToken(s[1..], reader.TokenSpan);
-                        break;
+                        return new SymbolToken(s[1..], reader.TokenSpan);
                     }
 
                     reader.MarkSingleLineTokenEnd();
-                    yield return new SyntaxToken(SyntaxTokenKind.Invalid, reader.TokenSpan);
-                    break;
+                    return new SyntaxToken(SyntaxTokenKind.Invalid, reader.TokenSpan);
                 case '^':
-                    yield return LexSingleOperator(SyntaxTokenKind.Hat);
-                    break;
+                    return LexSingleOperator(SyntaxTokenKind.Hat);
                 case '[':
-                    yield return LexSingleOperator(SyntaxTokenKind.OpenBracket);
-                    break;
+                    return LexSingleOperator(SyntaxTokenKind.OpenBracket);
                 case ']':
-                    yield return LexSingleOperator(SyntaxTokenKind.CloseBracket);
-                    break;
+                    return LexSingleOperator(SyntaxTokenKind.CloseBracket);
                 case '(':
-                    yield return LexSingleOperator(SyntaxTokenKind.OpenParenthesis);
-                    break;
+                    return LexSingleOperator(SyntaxTokenKind.OpenParenthesis);
                 case ')':
-                    yield return LexSingleOperator(SyntaxTokenKind.CloseParenthesis);
-                    break;
+                    return LexSingleOperator(SyntaxTokenKind.CloseParenthesis);
                 case '|':
-                    yield return LexSingleOperator(SyntaxTokenKind.Pipe);
-                    break;
+                    return LexSingleOperator(SyntaxTokenKind.Pipe);
                 case ';':
-                    yield return LexSingleOperator(SyntaxTokenKind.Semicolon);
-                    break;
+                    return LexSingleOperator(SyntaxTokenKind.Semicolon);
                 case '"':
-                    yield return new StringToken(ReadStringLiteral()[1..^1], reader.TokenSpan);
-                    break;
+                    return new StringToken(ReadStringLiteral()[1..^1], reader.TokenSpan);
                 case '$':
                     reader.Read();
-                    reader.MarkTokenEnd(reader.Read() == '\n'); 
+                    reader.MarkTokenEnd(reader.Read() == '\n');
                     //This seems weird, but this is standard Smalltalk behaviour (tested in squeak)
                     //Doing $ and putting a newline right after it will return a newline character.
                     //Also, something like '$ ' will indeed return a space.
-                    yield return reader.Peek() != Eof
+                    return reader.Peek() != Eof
                         ? (Token) new CharacterToken(reader.GetTokenString()[^1], reader.TokenSpan)
                         : new SyntaxToken(SyntaxTokenKind.Invalid, reader.TokenSpan);
-                    break;
                 default:
 
                     if (IsSpecialCharacter(ch))
                     {
-                        yield return new IdOrKeywordToken(ReadBinarySelector(), reader.TokenSpan);
-                        break;
+                        return new IdOrKeywordToken(ReadBinarySelector(), reader.TokenSpan);
                     }
 
                     if (char.IsDigit(ch) || ch == '-' || ch == '+')
                     {
-                        yield return ReadNumber();
-                        break;
+                        return ReadNumber();
                     }
 
                     if (char.IsLetter(ch))
                     {
-                        yield return ReadIdOrKeywordToken();
-                        break;
+                        return ReadIdOrKeywordToken();
                     }
 
                     reader.Read();
                     reader.MarkSingleLineTokenEnd();
-                    yield return new SyntaxToken(SyntaxTokenKind.Invalid, reader.TokenSpan);
-                    break;
+                    return new SyntaxToken(SyntaxTokenKind.Invalid, reader.TokenSpan);
             }
 
             goto doItAgain;
