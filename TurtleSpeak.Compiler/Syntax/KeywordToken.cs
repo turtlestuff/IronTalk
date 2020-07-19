@@ -2,14 +2,16 @@
 
 namespace TurtleSpeak.Compiler.Syntax
 {
-    public class KeywordToken : IdOrKeywordToken
+    public class KeywordToken : Token
     {
-        public KeywordToken(KeywordTokenKind name, SourceSpan location) : base(name.ToString().ToLowerInvariant(),
-            location)
+        public KeywordTokenKind Kind { get; }
+
+        public KeywordToken(KeywordTokenKind kind, SourceSpan location) : base(location)
         {
+            Kind = kind;
         }
 
-        public override string ToString() => $"KeywordToken {Name}@{Location}";
+        public override string ToString() => $"KeywordToken {Kind}@{Location}";
     }
 
     public enum KeywordTokenKind
@@ -18,6 +20,9 @@ namespace TurtleSpeak.Compiler.Syntax
         False,
         Self,
         Super,
-        Nil
+        Nil,
+        Class,
+        Inst,
+        Using
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Runtime;
@@ -19,6 +20,9 @@ namespace TurtleSpeak.Compiler.Syntax
         //public CompilerContext Context { get; }
         //SourceCodeReader sourceCode;
         readonly TokenizerBuffer reader;
+
+        readonly string[] keywordNames =
+            Enum.GetNames(typeof(KeywordTokenKind)).Select(s => s.ToLowerInvariant()).ToArray();
 
         public Lexer(TextReader r)
         {
@@ -113,7 +117,7 @@ namespace TurtleSpeak.Compiler.Syntax
 
                     if (IsSpecialCharacter(ch))
                     {
-                        return new IdOrKeywordToken(ReadBinarySelector(), reader.TokenSpan);
+                        return new IdentifierToken(ReadBinarySelector(), reader.TokenSpan);
                     }
 
                     if (char.IsDigit(ch) || ch == '-' || ch == '+')
@@ -175,16 +179,20 @@ namespace TurtleSpeak.Compiler.Syntax
             return reader.GetTokenString();
         }
 
-        IdOrKeywordToken ReadIdOrKeywordToken()
+        Token ReadIdOrKeywordToken()
         {
             reader.Read();
             while (char.IsLetterOrDigit((char) reader.Peek()))
                 reader.Read();
             reader.MarkSingleLineTokenEnd();
 
-            return Enum.TryParse<KeywordTokenKind>(reader.GetTokenString(), true, out var b)
-                ? new KeywordToken(b, reader.TokenSpan)
-                : new IdOrKeywordToken(reader.GetTokenString(), reader.TokenSpan);
+            var s = reader.GetTokenString();
+            if (keywordNames.Contains(s))
+                return new KeywordToken(Enum.Parse<KeywordTokenKind>(s, true), reader.TokenSpan);
+            else
+                return new IdentifierToken(s, reader.TokenSpan);
+
+            
         }
 
         string ReadBinarySelector()

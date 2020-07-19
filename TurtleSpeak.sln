@@ -1,8 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtleSpeak", "TurtleSpeak\TurtleSpeak.csproj", "{9AA92911-BC29-4416-AEE2-7C41DE313205}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30309.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurtleSpeak", "TurtleSpeak\TurtleSpeak.csproj", "{9AA92911-BC29-4416-AEE2-7C41DE313205}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtleSpeak.Compiler", "TurtleSpeak.Compiler\TurtleSpeak.Compiler.csproj", "{D19E2EE3-26DB-44FF-B715-B9101E527AC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurtleSpeak.Compiler", "TurtleSpeak.Compiler\TurtleSpeak.Compiler.csproj", "{D19E2EE3-26DB-44FF-B715-B9101E527AC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +21,11 @@ Global
 		{D19E2EE3-26DB-44FF-B715-B9101E527AC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D19E2EE3-26DB-44FF-B715-B9101E527AC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D19E2EE3-26DB-44FF-B715-B9101E527AC9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {94F3C69F-E50E-47A4-AC9F-A7BFE0B335A0}
 	EndGlobalSection
 EndGlobal
