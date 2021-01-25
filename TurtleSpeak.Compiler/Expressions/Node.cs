@@ -4,7 +4,7 @@ namespace TurtleSpeak.Compiler.Expressions
 {
     public class Node
     {
-        protected Node(SourceSpan location)
+        public Node(SourceSpan location)
         {
             Location = location;
         }

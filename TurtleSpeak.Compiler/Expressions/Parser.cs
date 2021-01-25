@@ -45,7 +45,8 @@ namespace TurtleSpeak.Compiler.Expressions
             return t switch
             {
                 KeywordToken { Kind: KeywordTokenKind.Using } k => ParseUsingStatement(k),
-                _ => throw new NotImplementedException($"Not implemented at {t.Location}")
+                KeywordToken { Kind: KeywordTokenKind.Class } k => ParseClassDeclaration(k),
+                _ => throw new NotImplementedException($"{t.Location}")
                 //TODO: make into diagnostic
             };
         }
@@ -58,17 +59,26 @@ namespace TurtleSpeak.Compiler.Expressions
             {
                 var t = NextToken();
                 if (t is IdentifierToken name)
+                {
                     names.Add(name);
+                }
                 else if (t is SyntaxToken { Kind: SyntaxTokenKind.Dot })
                 {
                     dotPosition = t.Location;
                     break;
                 }
                 else
+                {
                     throw new Exception($"Invalid Using Directive @ {t.Location}");
+                }
                 //TODO: make into diagnostic
             }
             return new UsingStatement(names.ToArray(), new SourceSpan(token.Location.Start, dotPosition.End));
+        }
+
+        ClassDeclaration ParseClassDeclaration(KeywordToken k)
+        {
+
         }
 
         Token Peek() => peek ??= lexer.Lex();

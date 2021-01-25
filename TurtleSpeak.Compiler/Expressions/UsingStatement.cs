@@ -1,9 +1,5 @@
 ﻿using Microsoft.Scripting;
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Text;
-using System.Xml.Serialization;
+using System.Linq;
 using TurtleSpeak.Compiler.Syntax;
 
 namespace TurtleSpeak.Compiler.Expressions
@@ -17,7 +13,7 @@ namespace TurtleSpeak.Compiler.Expressions
             Namespaces = namespaces;
         }
 
-        public override string ToString() => $"Using {string.Join<IdentifierToken>('.', Namespaces)}";
-    }                                                           //^^^Thanks, overloads :munamused:
+        public override string ToString() => $"Using {string.Join('.', Namespaces.Select(i => i.Name))}";
+    }                                                           
 }
     

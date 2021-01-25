@@ -24,7 +24,7 @@ TurtleSpeak Parser!!!!!!!!");
                 var lexer = new Lexer(new StringReader(source ?? ""));
                 while (lexer.Lex() is var l ^ l is SyntaxToken { Kind: SyntaxTokenKind.Eof })
                     Console.WriteLine(l);
-
+                Console.WriteLine("\n~~Parse~~");
                 lexer = new Lexer(new StringReader(source ?? ""));
                 var parser = new Parser(lexer);
                 foreach (var n in parser.ParseEverything())
