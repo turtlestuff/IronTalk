@@ -1,6 +1,6 @@
 using Microsoft.Scripting;
 
-namespace TurtleSpeak.Compiler.Expressions
+namespace IronTalk.Compiler.Expressions
 {
     public class Node
     {

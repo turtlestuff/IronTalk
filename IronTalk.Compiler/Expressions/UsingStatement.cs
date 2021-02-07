@@ -1,8 +1,8 @@
 ﻿using Microsoft.Scripting;
 using System.Linq;
-using TurtleSpeak.Compiler.Syntax;
+using IronTalk.Compiler.Syntax;
 
-namespace TurtleSpeak.Compiler.Expressions
+namespace IronTalk.Compiler.Expressions
 {
     public class UsingStatement : Node
     {

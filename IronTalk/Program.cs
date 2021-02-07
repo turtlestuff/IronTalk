@@ -1,22 +1,16 @@
 ﻿using System;
 using System.IO;
-using TurtleSpeak.Compiler.Expressions;
-using TurtleSpeak.Compiler.Syntax;
+using IronTalk.Compiler.Expressions;
+using IronTalk.Compiler.Syntax;
 
-namespace TurtleSpeak
+namespace IronTalk
 {
     static class Program
     {
         static void Main(string[] args)
-        {
-            if (args.Length > 0)
-            {
-                throw new NotImplementedException("we dont have fancy yet");
-            }
+        { 
 
-            Console.WriteLine(@"
-It's the very very very good
-TurtleSpeak Parser!!!!!!!!");
+            Console.WriteLine("Irontalk Test Parser");
             while (true)
             {
                 Console.Write(">=>");

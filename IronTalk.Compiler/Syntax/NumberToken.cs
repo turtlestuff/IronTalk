@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using Microsoft.Scripting;
 
-namespace TurtleSpeak.Compiler.Syntax
+namespace IronTalk.Compiler.Syntax
 {
     public class NumberToken : LiteralToken
     {

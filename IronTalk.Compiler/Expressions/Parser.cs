@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using Microsoft.Scripting;
-using TurtleSpeak.Compiler.Syntax;
+using IronTalk.Compiler.Syntax;
 
-namespace TurtleSpeak.Compiler.Expressions
+namespace IronTalk.Compiler.Expressions
 {
     public class Parser
     {
@@ -45,7 +45,6 @@ namespace TurtleSpeak.Compiler.Expressions
             return t switch
             {
                 KeywordToken { Kind: KeywordTokenKind.Using } k => ParseUsingStatement(k),
-                KeywordToken { Kind: KeywordTokenKind.Class } k => ParseClassDeclaration(k),
                 _ => throw new NotImplementedException($"{t.Location}")
                 //TODO: make into diagnostic
             };
@@ -76,10 +75,6 @@ namespace TurtleSpeak.Compiler.Expressions
             return new UsingStatement(names.ToArray(), new SourceSpan(token.Location.Start, dotPosition.End));
         }
 
-        ClassDeclaration ParseClassDeclaration(KeywordToken k)
-        {
-
-        }
 
         Token Peek() => peek ??= lexer.Lex();
 

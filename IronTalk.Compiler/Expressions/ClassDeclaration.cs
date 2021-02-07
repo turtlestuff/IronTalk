@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using TurtleSpeak.Compiler.Syntax;
+using IronTalk.Compiler.Syntax;
 
-namespace TurtleSpeak.Compiler.Expressions
+namespace IronTalk.Compiler.Expressions
 {
     public class ClassDeclaration : Node
     {
