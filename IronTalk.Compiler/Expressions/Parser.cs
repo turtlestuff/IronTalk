@@ -45,9 +45,15 @@ namespace IronTalk.Compiler.Expressions
             return t switch
             {
                 KeywordToken { Kind: KeywordTokenKind.Using } k => ParseUsingStatement(k),
+                IdentifierToken i => ParseClassDeclaration(i),
                 _ => throw new NotImplementedException($"{t.Location}")
                 //TODO: make into diagnostic
             };
+        }
+
+        ClassDeclaration ParseClassDeclaration(IdentifierToken identifier)
+        {
+            return null!;   
         }
 
         UsingStatement ParseUsingStatement(KeywordToken token)

@@ -43,9 +43,8 @@ namespace IronTalk.Compiler.Syntax
             {
                 case Eof:
                     return new SyntaxToken(SyntaxTokenKind.Eof, reader.TokenSpan);
-                case '\'':
-                    reader.ReadLine();
-                    reader.Read();
+                case '"':
+                    SkipComment();
                     break;
                 case ':':
                     reader.Read();
@@ -68,7 +67,7 @@ namespace IronTalk.Compiler.Syntax
                         return new SyntaxToken(SyntaxTokenKind.HashOpenBracket, reader.TokenSpan); //byte array
                     }
 
-                    if (reader.Peek() == '"')
+                    if (reader.Peek() == '\'')
                     {
                         var s = ReadStringLiteral();
                         return new SymbolToken(s[2..^1], reader.TokenSpan);
@@ -102,7 +101,7 @@ namespace IronTalk.Compiler.Syntax
                     return LexSingleOperator(SyntaxTokenKind.Pipe);
                 case ';':
                     return LexSingleOperator(SyntaxTokenKind.Semicolon);
-                case '"':
+                case '\'':
                     return new StringToken(ReadStringLiteral()[1..^1], reader.TokenSpan);
                 case '$':
                     reader.Read();
@@ -138,12 +137,26 @@ namespace IronTalk.Compiler.Syntax
             goto doItAgain;
         }
 
-        static readonly char[] WhitespaceChars = {' ', '\r', '\n', '\t'};
+        void SkipComment()
+        {
+            reader.Read();
+            while (true)
+            {
+                var c = (char)reader.Read();
+                if (c != '"') continue;
+                reader.MarkMultiLineTokenEnd();
+                break;
+            }
+        }
 
         void SkipWhitespace()
         {
-            for (var ch = reader.Peek(); Array.IndexOf(WhitespaceChars, (char) ch) != -1; ch = reader.Peek())
+            while (true)
+            {
+                if (!char.IsWhiteSpace((char)reader.Peek()))
+                    break;
                 reader.Read();
+            }
 
             reader.MarkMultiLineTokenEnd();
         }
@@ -161,8 +174,8 @@ namespace IronTalk.Compiler.Syntax
             while (true)
             {
                 var c = (char) reader.Read();
-                if (c != '"') continue;
-                reader.MarkSingleLineTokenEnd();
+                if (c != '\'') continue;
+                reader.MarkMultiLineTokenEnd();
                 break;
             }
 

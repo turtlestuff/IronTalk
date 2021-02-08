@@ -8,6 +8,6 @@ namespace IronTalk.Compiler.Syntax
         {
         }
 
-        public override string ToString() => $"StringToken \"{Value}\"@{Location}";
+        public override string ToString() => $"StringToken '{Value}'@{Location}";
     }
 }
